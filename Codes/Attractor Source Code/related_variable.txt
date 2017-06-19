@@ -1,0 +1,107 @@
+BETA  0.6						【内聚参数】
+NetNodeNum = 34						【网络节点数量】
+MaxNeighborNum = 1000					【最大度】
+
+NodeTableHead NodeTable[NetNodeNum]			【保存网络，假定节点id从1开始】
+EdgeTableHead EdgeWithAttachmentTable[NetNodeNum]	【保存有连接的边】
+EdgesOfNodeTableHead EdgesOfNodeTable[NetNodeNum]	【保存每个节点的边（与它连接的每一条边）】
+
+int CN[MaxNeighborNum]					【大多数邻居数是66】	
+int DiffA[MaxNeighborNum]				【最大节点数量】
+int DiffB[MaxNeighborNum]	
+int NetEdgeNum						【网络边数】
+	
+typedef struct Edge{					【边信息】
+	int n_1_ID;					【节点1的ID？】
+	int n_2_ID;					【节点2的ID？】
+	int e_ID;					【边e的ID？】
+	double dist;					【距离？】
+
+	int * CN_Loc;					【指针，指向一个四列的二维矩阵】
+	int CN_Loc_Length;				【CN_Loc的行数，用于搜索互动中的CN_Loc】
+
+	int * N_1_Info;					【节点1的信息？】
+	int N_1_Info_Length;				【N_1_Info的行数，用于搜索互动中的N_1_Info】
+
+	int * N_1_Loc; 					【节点1的地址？】
+	int N_1_Loc_Length;				【N_1_Loc的行数，用于搜索互动中的N_1_Loc】
+
+	int * N_2_Info;
+	int N_2_Info_Length;	
+
+	int * N_2_Loc;
+	int N_2_Loc_Length;	
+
+}EA;
+
+typedef struct EdgeLoc{					【节点表的边】
+	int Row;
+	int Column;
+}EdgeLoc;
+
+typedef struct PointerToNeighbors{			【节点表头】	
+	int NodeNum;					【节点的邻居】
+	int * Pointer;					【指向邻接表】
+}NodeTableHead;
+
+typedef struct PointerToEdges{				【带附表头的边？】
+	int EdgeNum;					【边的数量】
+	EA * Pointer;					【边表】
+}EdgeTableHead;
+
+typedef struct PointerToEdgeLoc{			【带节点表头的边？】
+	int EdgeNum;
+	EdgeLoc * Pointer;
+}EdgesOfNodeTableHead;
+
+
+*********************************-=调用函数=-********************************
+void EstablishNodeTable(char * inputfilename, int FileLine){	【建立节点表】
+void EstablishEdgeTable()			【建立边表】
+void EstablishEdgesOfNodeTable()		【建立节点表的边】
+void Interaction(doubl     e beta,int FileLine)	【交互】
+void FindClusters(char * outputfile)	 【通过广度优先搜索算法发现簇】
+void FindNeighbors(int node_i,int node_j)【计算cn，diffA，diffB】                                                                                    FFF
+void FindCN(int node_i,int node_j)	 【发现CN】
+void SortFun(int *Pointer,int Num)	 【以升序为每个节点的邻居排序】
+
+
+*********************************-=主函数=-**********************************
+int main(int argc,char *argv[]) 
+{
+  【开始建立节点表】
+  EstablishNodeTable(argv[1],atoi(argv[3]));
+  【完成节点表】
+
+  【开始建立边表】
+  EstablishEdgeTable();
+  【完成边表】
+
+  【开始建立节点表的边】
+   EstablishEdgesOfNodeTable();
+  【完成节点表的边】
+
+  【开始交互】
+  Interaction(BETA,atoi(argv[3]));
+  【完成交互】
+
+  【开始输出】
+  FindClusters(argv[2]);
+  【完成结果输出】
+  
+  return 0；
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
